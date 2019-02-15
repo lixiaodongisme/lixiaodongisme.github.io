@@ -96,38 +96,27 @@
 
 
 
-  <meta name="description" content="随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提">
+  <meta name="description" content="在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。">
 <meta name="keywords" content="spring boot,java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring boot(一) 自动装配----约定大于配置">
-<meta property="og:url" content="http://yoursite.com/2019/02/14/spring-boot-一-自动装配-约定大于配置/index.html">
+<meta property="og:title" content="spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）">
+<meta property="og:url" content="http://yoursite.com/2019/02/15/spring-boot-二-自动装配原理-实例分析（HttpEncodingAutoConfiguration）/index.html">
 <meta property="og:site_name" content="晓坞">
-<meta property="og:description" content="随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提">
+<meta property="og:description" content="在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x6z6w43j30ei06ajtl.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x83opdzj30le05sad8.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x8niumoj30a403o0tp.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x9400nhj30ca03y3zw.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x9jv13yj30bw048abg.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x9yysl6j30jy09rjwc.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06xaf65byj30k806ajuy.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06xaw3dsaj30in08ywjn.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06xb8nq3rj30lf04ldj2.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06xb8nq3rj30lf04ldj2.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06xcau2aoj30nq02dwgf.jpg#pic_center">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06xcq7814j30pd0f57f7.jpg#pic_center">
-<meta property="og:updated_time" content="2019-02-15T03:00:21.643Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06ytry1qwj30h608imyk.jpg#pic_center">
+<meta property="og:updated_time" content="2019-02-15T03:51:14.361Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="spring boot(一) 自动装配----约定大于配置">
-<meta name="twitter:description" content="随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06x6z6w43j30ei06ajtl.jpg#pic_center">
+<meta name="twitter:title" content="spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）">
+<meta name="twitter:description" content="在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06ytry1qwj30h608imyk.jpg#pic_center">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/14/spring-boot-一-自动装配-约定大于配置/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/15/spring-boot-二-自动装配原理-实例分析（HttpEncodingAutoConfiguration）/">
 
 
 
@@ -137,7 +126,7 @@
   };
 </script>
 
-  <title>spring boot(一) 自动装配----约定大于配置 | 晓坞</title>
+  <title>spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration） | 晓坞</title>
   
 
 
@@ -382,7 +371,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/spring-boot-一-自动装配-约定大于配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/15/spring-boot-二-自动装配原理-实例分析（HttpEncodingAutoConfiguration）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Li Xiaodong">
@@ -399,7 +388,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">spring boot(一) 自动装配----约定大于配置
+          <h1 class="post-title" itemprop="name headline">spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）
 
               
             
@@ -425,24 +414,12 @@
                 
               
 
-              <time title="创建时间：2019-02-14 18:13:31" itemprop="dateCreated datePublished" datetime="2019-02-14T18:13:31+08:00">2019-02-14</time>
+              <time title="创建时间：2019-02-15 11:48:40 / 修改时间：11:51:14" itemprop="dateCreated datePublished" datetime="2019-02-15T11:48:40+08:00">2019-02-15</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-15 11:00:21" itemprop="dateModified" datetime="2019-02-15T11:00:21+08:00">2019-02-15</time>
               
             
           </span>
@@ -478,8 +455,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/02/14/spring-boot-一-自动装配-约定大于配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/14/spring-boot-一-自动装配-约定大于配置/" itemprop="commentCount"></span>
+                <a href="/2019/02/15/spring-boot-二-自动装配原理-实例分析（HttpEncodingAutoConfiguration）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/15/spring-boot-二-自动装配原理-实例分析（HttpEncodingAutoConfiguration）/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -514,19 +491,28 @@
       
 
       
-        <p>随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。<br>spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提供了一套默认的配置，不需要我们再去手动的配置xml配置文件，只有当spring boot默认提供的配置不满足我们的需求时，我们再去修改默认配置。那么，spring boot是如何做到自动装配的呢？下面就通过源码来学习一下spring boot的自动装配机制。<br><a id="more"></a></p>
-<h2 id="1-SpringBootApplication"><a href="#1-SpringBootApplication" class="headerlink" title="1. @SpringBootApplication"></a>1. @SpringBootApplication</h2><p><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06x6z6w43j30ei06ajtl.jpg#pic_center" alt=""><br>该类为spring boot的主配置类，spring boot的核心功能就是由@SpringBootApplication这个注解来实现的。<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06x83opdzj30le05sad8.jpg#pic_center" alt=""><br>进入@SpringBootApplication注解后，发现这个注解还包含了很多注解，其中比较重要的有两个，分别是@SpringBootConfiguration、@EnableAutoConfiguration</p>
-<h3 id="1-1-SpringBootConfiguration"><a href="#1-1-SpringBootConfiguration" class="headerlink" title="1.1@SpringBootConfiguration"></a>1.1@SpringBootConfiguration</h3><p><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06x8niumoj30a403o0tp.jpg#pic_center" alt=""><br>进入@SpringBootConfiguration后发现，该注解包含了@Configuration。<br>==@Configuration==：</p>
-<ul>
-<li>表示该类是一个配置类。spring boot建议我们使用该注解来代替传统的xml配置文件；</li>
-<li>@Configuration包含了@Component。所以加了@Configuration注解的类会自动纳入spring容器。</li>
-</ul>
-<h3 id="1-2-EnableAutoConfiguration"><a href="#1-2-EnableAutoConfiguration" class="headerlink" title="1.2@EnableAutoConfiguration"></a>1.2@EnableAutoConfiguration</h3><p><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06x9400nhj30ca03y3zw.jpg#pic_center" alt=""><br>进入@EnableAutoConfiguration，该注解包含了@AutoConfigurationPackage，并导入了一个AutoConfigurationImportSelector类。</p>
-<h4 id="1-2-1-AutoConfigurationPackage"><a href="#1-2-1-AutoConfigurationPackage" class="headerlink" title="1.2.1@AutoConfigurationPackage"></a>1.2.1@AutoConfigurationPackage</h4><p>我们以往使用spring进行传统方式的开发时，需要在配置文件中定义一个scan扫描器，在xml配置了这个标签后，spring才可以自动去扫描base-pack下面或者子包下面的java文件，如果扫描到有@Component @Controller@Service等这些注解的类，则把这些类注册为bean。<br>在spring boot中，我们只需要将我们自己写的java文件，放到@SpringBootApplication所在类的包下，spring boot就可以自动的帮我们完成扫描，不需要我们再去手动配置扫描器，简化了我们的开发流程。<br>spring boot就是使用@AutoConfigurationPackage这个注解，完成了自动扫描，原理如下：<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06x9jv13yj30bw048abg.jpg#pic_center" alt=""><br>进入@AutoConfigurationPackage后发现这个注解导入了一个名为Registrar的内部类，该内部类的代码如下所示。<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06x9yysl6j30jy09rjwc.jpg#pic_center" alt=""><br>通过 图中标注的方法，spring boot可以找到@SpringBootApplication所在类的包，并将该包与它的子包全部注册到spring容器中进行管理。</p>
-<h4 id="1-2-2AutoConfigurationImportSelector"><a href="#1-2-2AutoConfigurationImportSelector" class="headerlink" title="1.2.2AutoConfigurationImportSelector"></a>1.2.2AutoConfigurationImportSelector</h4><p>在我们的开发过程中，除了我们自己编写的代码外，我们还需要引用很多第三方的依赖，spring boot也可以通过自动配置，帮我们引入第三方的依赖。其原理就是通过@EnableAutoConfiguration这个注解导入的AutoConfigurationImportSelector类来实现的。</p>
-<p>AutoConfigurationImportSelector这个类通过SpringFactoriesLoader.loadFactoryNames这个方法来加载第三方配置。源码如下：<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06xaf65byj30k806ajuy.jpg#pic_center" alt=""><br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06xaw3dsaj30in08ywjn.jpg#pic_center" alt=""><br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06xb8nq3rj30lf04ldj2.jpg#pic_center" alt=""><br>loadFactoryNames方法的第一个参数getSpringFactoriesLoaderFactoryClass()，直接返回了==EnableAutoConfiguration==这个类。<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06xb8nq3rj30lf04ldj2.jpg#pic_center" alt=""><br>进入SpringFactoriesLoader类后可以看到，loadFactoryNames方法又去调用了loadSpringFactories这个方法。代码如下：<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06xcau2aoj30nq02dwgf.jpg#pic_center" alt=""><br>最终这个方法里，SpringFactoriesLoader会去加载jar包中的META-INF/spring.factories。如果找到这个文件，SpringFactoriesLoader就会搜索文件中的一个配置org.springframework.boot.autoconfigure.EnableAutoConfiguration,并读取后面的值。<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06xcq7814j30pd0f57f7.jpg#pic_center" alt=""><br>SpringBoot中的META-INF/spring.factories（完整路径：spring-boot/spring-boot-autoconfigure/src/main/resources/META-INF/spring.factories）中关于EnableAutoConfiguration的这段配置如下（只列出了一部分）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Auto Configure</span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration,\</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
-<p>当然了，这些AutoConfiguration不是所有都会加载的，会根据AutoConfiguration上的@ConditionalOnClass等条件，再进一步判断是否加载。下篇文章我们通过HttpEncodingAutoConfiguration实例来分析整个自动配置的过程。</p>
+        <p>在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。<br><a id="more"></a><br>我们在常规项目中配置Http编码的时候是在web.xml添加一个filter,如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;filter&gt;</span><br><span class="line">    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;</span><br><span class="line">    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;encoding&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;UTF-8&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;forceEncoding&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;true&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">&lt;/filter&gt;</span><br><span class="line"> &lt;filter-mapping&gt;</span><br><span class="line">      &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;</span><br><span class="line">      &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</span><br><span class="line">  &lt;/filter-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>spring boot要完成自动配置，就要满足两个条件：</p>
+<ol>
+<li>能配置CharacterEncodingFilter这个Bean；</li>
+<li>能配置encoding和forceEncoding两个参数。</li>
+</ol>
+<h2 id="1-自动配置"><a href="#1-自动配置" class="headerlink" title="1.自动配置"></a>1.自动配置</h2><p>我们在org.springframework.boot.autoconfigure.web.servlet包中找到HttpEncodingAutoConfiguration类后，可以看到源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@EnableConfigurationProperties(HttpProperties.class)</span><br><span class="line">// Spring 底层 @Conditional 注解，根据不同的条件，如果满足指定的条件，整个配置类里面的配置就会生效，该注解是判断当前应用是否是web应用，如果是， HttpEncodingAutoConfiguration 配置类生效；</span><br><span class="line">@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)</span><br><span class="line">// 判断当前项目有没有这个类 CharacterEncodingFilter；SpringMVC 中进行乱码解决的过滤器，如果有则 HttpEncodingAutoConfiguration 配置生效；</span><br><span class="line">@ConditionalOnClass(CharacterEncodingFilter.class)</span><br><span class="line">// 判断 application.properties 配置文件中是否存在 spring.http.encoding.enabled，如果不存在，判断也是成立的，因为 matchIfMissing=true，即缺省时默认为 true。</span><br><span class="line">@ConditionalOnProperty(prefix = &quot;spring.http.encoding&quot;, value = &quot;enabled&quot;, matchIfMissing = true)</span><br><span class="line">public class HttpEncodingAutoConfiguration &#123;</span><br><span class="line"></span><br><span class="line">   private final HttpProperties.Encoding properties;</span><br><span class="line"></span><br><span class="line">   public HttpEncodingAutoConfiguration(HttpProperties properties) &#123;</span><br><span class="line">      this.properties = properties.getEncoding();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @Bean // 使用java方式配置CharacterEncodingFilter的Bean</span><br><span class="line">   @ConditionalOnMissingBean // spring容器中没有这个类时</span><br><span class="line">   public CharacterEncodingFilter characterEncodingFilter() &#123;</span><br><span class="line">      CharacterEncodingFilter filter = new OrderedCharacterEncodingFilter();</span><br><span class="line">      filter.setEncoding(this.properties.getCharset().name());</span><br><span class="line">      filter.setForceRequestEncoding(this.properties.shouldForce(Type.REQUEST));</span><br><span class="line">      filter.setForceResponseEncoding(this.properties.shouldForce(Type.RESPONSE));</span><br><span class="line">      return filter;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @Bean</span><br><span class="line">   public LocaleCharsetMappingsCustomizer localeCharsetMappingsCustomizer() &#123;</span><br><span class="line">      return new LocaleCharsetMappingsCustomizer(this.properties);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   private static class LocaleCharsetMappingsCustomizer implements</span><br><span class="line">         WebServerFactoryCustomizer&lt;ConfigurableServletWebServerFactory&gt;, Ordered &#123;</span><br><span class="line"></span><br><span class="line">      private final HttpProperties.Encoding properties;</span><br><span class="line"></span><br><span class="line">      LocaleCharsetMappingsCustomizer(HttpProperties.Encoding properties) &#123;</span><br><span class="line">         this.properties = properties;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      @Override</span><br><span class="line">      public void customize(ConfigurableServletWebServerFactory factory) &#123;</span><br><span class="line">         if (this.properties.getMapping() != null) &#123;</span><br><span class="line">            factory.setLocaleCharsetMappings(this.properties.getMapping());</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      @Override</span><br><span class="line">      public int getOrder() &#123;</span><br><span class="line">         return 0;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到这个类上总共有5个注解，我们分别来看这些注解的作用。</p>
+<h3 id="1-1-Configuration"><a href="#1-1-Configuration" class="headerlink" title="1.1@Configuration"></a>1.1@Configuration</h3><p>==@Configuration==：表示这个类是一个配置类，并将这个类加入IOC容器。</p>
+<h3 id="1-2-EnableConfigurationProperties"><a href="#1-2-EnableConfigurationProperties" class="headerlink" title="1.2@EnableConfigurationProperties"></a>1.2@EnableConfigurationProperties</h3><p>==@EnableConfigurationProperties(HttpProperties.class)==：启动指定类的ConfigurationProperties功能；将配置文件中对应的值和HttpEncodingProperties绑定起来；并把HttpEncodingProperties加入到ioc容器中。<br>进入这个注解，源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">// 在application.properties使用prefix+属性名的方式可以修改默认配置</span><br><span class="line">@ConfigurationProperties(prefix = &quot;spring.http&quot;)</span><br><span class="line">public class HttpProperties &#123;</span><br><span class="line"></span><br><span class="line">   private boolean logRequestDetails;</span><br><span class="line"></span><br><span class="line">   private final Encoding encoding = new Encoding();</span><br><span class="line"></span><br><span class="line">   public boolean isLogRequestDetails() &#123;</span><br><span class="line">      return this.logRequestDetails;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public void setLogRequestDetails(boolean logRequestDetails) &#123;</span><br><span class="line">      this.logRequestDetails = logRequestDetails;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public Encoding getEncoding() &#123;</span><br><span class="line">      return this.encoding;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static class Encoding &#123;</span><br><span class="line"></span><br><span class="line">     // spring boot默认的编码格式就是UTF-8</span><br><span class="line">      public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;</span><br><span class="line"></span><br><span class="line">      private Charset charset = DEFAULT_CHARSET;</span><br><span class="line"></span><br><span class="line">      private Boolean force;</span><br><span class="line"></span><br><span class="line">      private Boolean forceRequest;</span><br><span class="line"></span><br><span class="line">      private Boolean forceResponse;</span><br><span class="line"></span><br><span class="line">      private Map&lt;Locale, Charset&gt; mapping;</span><br><span class="line"></span><br><span class="line">      public Charset getCharset() &#123;</span><br><span class="line">         return this.charset;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public void setCharset(Charset charset) &#123;</span><br><span class="line">         this.charset = charset;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public boolean isForce() &#123;</span><br><span class="line">         return Boolean.TRUE.equals(this.force);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public void setForce(boolean force) &#123;</span><br><span class="line">         this.force = force;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public boolean isForceRequest() &#123;</span><br><span class="line">         return Boolean.TRUE.equals(this.forceRequest);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public void setForceRequest(boolean forceRequest) &#123;</span><br><span class="line">         this.forceRequest = forceRequest;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public boolean isForceResponse() &#123;</span><br><span class="line">         return Boolean.TRUE.equals(this.forceResponse);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public void setForceResponse(boolean forceResponse) &#123;</span><br><span class="line">         this.forceResponse = forceResponse;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public Map&lt;Locale, Charset&gt; getMapping() &#123;</span><br><span class="line">         return this.mapping;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public void setMapping(Map&lt;Locale, Charset&gt; mapping) &#123;</span><br><span class="line">         this.mapping = mapping;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public boolean shouldForce(Type type) &#123;</span><br><span class="line">         Boolean force = (type != Type.REQUEST) ? this.forceResponse</span><br><span class="line">               : this.forceRequest;</span><br><span class="line">         if (force == null) &#123;</span><br><span class="line">            force = this.force;</span><br><span class="line">         &#125;</span><br><span class="line">         if (force == null) &#123;</span><br><span class="line">            force = (type == Type.REQUEST);</span><br><span class="line">         &#125;</span><br><span class="line">         return force;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public enum Type &#123;</span><br><span class="line"></span><br><span class="line">         REQUEST, RESPONSE</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>前面有说到spring boot的理念是“约定大于配置”，可如果我们想修改默认配置改怎么修改呢？我们只需要在application.properties配置文件中，按照prefix + 属性名，就可以修改对应的属性。在本例中，我们如果想修改项目的默认编码为GBK，只需要在全局配置文件中添加一行代码即可，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring.http.encoding.charset=GBK</span><br></pre></td></tr></table></figure>
+<p>通过上面的分析，我们知道了在配置文件中修改默认配置的原理。关于<a href="https://docs.spring.io/spring-boot/docs/1.5.9.RELEASE/reference/htmlsingle/#common-application-properties" target="_blank" rel="noopener">配置文件可配置属性</a>，可以参考官方文档。</p>
+<h3 id="1-3Conditional"><a href="#1-3Conditional" class="headerlink" title="1.3Conditional"></a>1.3Conditional</h3><p>剩下的三个注解都是ConditionalOnXXX类型的注解，这类注解都是@Conditional注解的派生注解，作用是必须是@Conditional指定的条件成立，才给容器中添加组件，配置里的内容才会生效。<br>针对本例来说，必须@ConditionalOnWebApplication、@ConditionalOnClass、@ConditionalOnProperty三个注解对应的条件都生效，HttpEncodingAutoConfiguration配置类才会生效。</p>
+<h3 id="1-4快速查看当前生效的配置类"><a href="#1-4快速查看当前生效的配置类" class="headerlink" title="1.4快速查看当前生效的配置类"></a>1.4快速查看当前生效的配置类</h3><p>在spring.factories文件中，我们可以看到有上百个默认配置，如果我们想知道当前有哪些默认配置生效了，哪些没有生效，这样一个个去分析明显是不现实的。我们可以在application.properties配置文件中添加以下配置，来快速查看当前生效的默认配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">debug=true</span><br></pre></td></tr></table></figure>
+<p>此时再启动应用时，就可以在控制台看到生效的配置与没有生效的配置，并且可以看到配置没有生效的原因。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Positive matches(生效的配置):</span><br><span class="line">-----------------</span><br><span class="line">      HttpEncodingAutoConfiguration matched:</span><br><span class="line">      - @ConditionalOnClass found required class &apos;org.springframework.web.filter.CharacterEncodingFilter&apos; (OnClassCondition)</span><br><span class="line">      - found &apos;session&apos; scope (OnWebApplicationCondition)</span><br><span class="line">      - @ConditionalOnProperty (spring.http.encoding.enabled) matched (OnPropertyCondition)</span><br><span class="line"></span><br><span class="line">         HttpEncodingAutoConfiguration#characterEncodingFilter matched:</span><br><span class="line">      - @ConditionalOnMissingBean (types: org.springframework.web.filter.CharacterEncodingFilter; SearchStrategy: all) did not find any beans (OnBeanCondition)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Negative matches(没有生效的配置):</span><br><span class="line">-----------------</span><br><span class="line">      ActiveMQAutoConfiguration:</span><br><span class="line">         Did not match:</span><br><span class="line">         - @ConditionalOnClass did not find required class &apos;javax.jms.ConnectionFactory&apos; (OnClassCondition)</span><br></pre></td></tr></table></figure>
+<h2 id="2-Conditional扩展注解"><a href="#2-Conditional扩展注解" class="headerlink" title="2.@Conditional扩展注解"></a>2.@Conditional扩展注解</h2><p>除了以上解析到的注解，SpringBoot 还为我们提供了更多的有关 @Conditional 的派生注解。它们的作用：必须是 @Conditional 指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效：<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g06ytry1qwj30h608imyk.jpg#pic_center" alt=""></p>
 
       
     </div>
@@ -599,15 +585,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/02/14/spring-boot-一-自动装配-约定大于配置/" rel="next" title="spring boot(一) 自动装配----约定大于配置">
+                <i class="fa fa-chevron-left"></i> spring boot(一) 自动装配----约定大于配置
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/15/spring-boot-二-自动装配原理-实例分析（HttpEncodingAutoConfiguration）/" rel="prev" title="spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）">
-                spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -777,7 +763,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SpringBootApplication"><span class="nav-text">1. @SpringBootApplication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-SpringBootConfiguration"><span class="nav-text">1.1@SpringBootConfiguration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-EnableAutoConfiguration"><span class="nav-text">1.2@EnableAutoConfiguration</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-AutoConfigurationPackage"><span class="nav-text">1.2.1@AutoConfigurationPackage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2AutoConfigurationImportSelector"><span class="nav-text">1.2.2AutoConfigurationImportSelector</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-自动配置"><span class="nav-text">1.自动配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Configuration"><span class="nav-text">1.1@Configuration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-EnableConfigurationProperties"><span class="nav-text">1.2@EnableConfigurationProperties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3Conditional"><span class="nav-text">1.3Conditional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4快速查看当前生效的配置类"><span class="nav-text">1.4快速查看当前生效的配置类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Conditional扩展注解"><span class="nav-text">2.@Conditional扩展注解</span></a></li></ol></div>
             
 
           </div>
