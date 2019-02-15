@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-CN">
+<html class="theme-next gemini use-motion" lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -72,7 +72,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Gemini',
     version: '7.0.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -96,24 +96,38 @@
 
 
 
-  <meta name="description" content="The best website in the Eastern Hemisphere.">
+  <meta name="description" content="随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提">
+<meta name="keywords" content="spring boot,java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HelloWorld">
-<meta property="og:url" content="http://yoursite.com/2019/02/14/HelloWorld/index.html">
-<meta property="og:site_name" content="Hello World">
-<meta property="og:description" content="The best website in the Eastern Hemisphere.">
+<meta property="og:title" content="spring boot(一) 自动装配----约定大于配置">
+<meta property="og:url" content="http://yoursite.com/2019/02/14/spring-boot-一-自动装配-约定大于配置/index.html">
+<meta property="og:site_name" content="晓坞">
+<meta property="og:description" content="随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-14T09:37:33.264Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212133705689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212133954612.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212134055378.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212134322205.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212134556936.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212134907898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212143052331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212143137202.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212143243636.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212144327296.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212144501639.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190212144602339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:updated_time" content="2019-02-14T10:23:26.146Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HelloWorld">
-<meta name="twitter:description" content="The best website in the Eastern Hemisphere.">
+<meta name="twitter:title" content="spring boot(一) 自动装配----约定大于配置">
+<meta name="twitter:description" content="随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190212133705689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/14/HelloWorld/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/14/spring-boot-一-自动装配-约定大于配置/">
 
 
 
@@ -123,7 +137,7 @@
   };
 </script>
 
-  <title>HelloWorld | Hello World</title>
+  <title>spring boot(一) 自动装配----约定大于配置 | 晓坞</title>
   
 
 
@@ -182,7 +196,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hello World</span>
+        <span class="site-title">晓坞</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -368,16 +382,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/HelloWorld/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/spring-boot-一-自动装配-约定大于配置/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Li Xiaodong">
-      <meta itemprop="description" content="The best website in the Eastern Hemisphere.">
+      <meta itemprop="description" content="不止是技术">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hello World">
+      <meta itemprop="name" content="晓坞">
     </span>
 
     
@@ -385,7 +399,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">HelloWorld
+          <h1 class="post-title" itemprop="name headline">spring boot(一) 自动装配----约定大于配置
 
               
             
@@ -411,16 +425,51 @@
                 
               
 
-              <time title="创建时间：2019-02-14 17:37:33" itemprop="dateCreated datePublished" datetime="2019-02-14T17:37:33+08:00">2019-02-14</time>
+              <time title="创建时间：2019-02-14 18:13:31 / 修改时间：18:23:26" itemprop="dateCreated datePublished" datetime="2019-02-14T18:13:31+08:00">2019-02-14</time>
             
 
+            
+              
+
+              
             
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/spring-boot系列/" itemprop="url" rel="index"><span itemprop="name">spring boot系列</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/02/14/spring-boot-一-自动装配-约定大于配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/14/spring-boot-一-自动装配-约定大于配置/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -446,7 +495,20 @@
       
 
       
-        
+        <p>随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。<br>spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提供了一套默认的配置，不需要我们再去手动的配置xml配置文件，只有当spring boot默认提供的配置不满足我们的需求时，我们再去修改默认配置。那么，spring boot是如何做到自动装配的呢？下面就通过源码来学习一下spring boot的自动装配机制。<br><a id="more"></a></p>
+<h2 id="1-SpringBootApplication"><a href="#1-SpringBootApplication" class="headerlink" title="1. @SpringBootApplication"></a>1. @SpringBootApplication</h2><p><img src="https://img-blog.csdnimg.cn/20190212133705689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>该类为spring boot的主配置类，spring boot的核心功能就是由@SpringBootApplication这个注解来实现的。<br><img src="https://img-blog.csdnimg.cn/20190212133954612.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>进入@SpringBootApplication注解后，发现这个注解还包含了很多注解，其中比较重要的有两个，分别是@SpringBootConfiguration、@EnableAutoConfiguration</p>
+<h3 id="1-1-SpringBootConfiguration"><a href="#1-1-SpringBootConfiguration" class="headerlink" title="1.1@SpringBootConfiguration"></a>1.1@SpringBootConfiguration</h3><p><img src="https://img-blog.csdnimg.cn/20190212134055378.png#pic_center" alt="在这里插入图片描述"><br>进入@SpringBootConfiguration后发现，该注解包含了@Configuration。<br>==@Configuration==：</p>
+<ul>
+<li>表示该类是一个配置类。spring boot建议我们使用该注解来代替传统的xml配置文件；</li>
+<li>@Configuration包含了@Component。所以加了@Configuration注解的类会自动纳入spring容器。</li>
+</ul>
+<h3 id="1-2-EnableAutoConfiguration"><a href="#1-2-EnableAutoConfiguration" class="headerlink" title="1.2@EnableAutoConfiguration"></a>1.2@EnableAutoConfiguration</h3><p><img src="https://img-blog.csdnimg.cn/20190212134322205.png#pic_center" alt="在这里插入图片描述"><br>进入@EnableAutoConfiguration，该注解包含了@AutoConfigurationPackage，并导入了一个AutoConfigurationImportSelector类。</p>
+<h4 id="1-2-1-AutoConfigurationPackage"><a href="#1-2-1-AutoConfigurationPackage" class="headerlink" title="1.2.1@AutoConfigurationPackage"></a>1.2.1@AutoConfigurationPackage</h4><p>我们以往使用spring进行传统方式的开发时，需要在配置文件中定义一个scan扫描器，在xml配置了这个标签后，spring才可以自动去扫描base-pack下面或者子包下面的java文件，如果扫描到有@Component @Controller@Service等这些注解的类，则把这些类注册为bean。<br>在spring boot中，我们只需要将我们自己写的java文件，放到@SpringBootApplication所在类的包下，spring boot就可以自动的帮我们完成扫描，不需要我们再去手动配置扫描器，简化了我们的开发流程。<br>spring boot就是使用@AutoConfigurationPackage这个注解，完成了自动扫描，原理如下：<br><img src="https://img-blog.csdnimg.cn/20190212134556936.png#pic_center" alt="在这里插入图片描述"><br>进入@AutoConfigurationPackage后发现这个注解导入了一个名为Registrar的内部类，该内部类的代码如下所示。<br><img src="https://img-blog.csdnimg.cn/20190212134907898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>通过 图中标注的方法，spring boot可以找到@SpringBootApplication所在类的包，并将该包与它的子包全部注册到spring容器中进行管理。</p>
+<h4 id="1-2-2AutoConfigurationImportSelector"><a href="#1-2-2AutoConfigurationImportSelector" class="headerlink" title="1.2.2AutoConfigurationImportSelector"></a>1.2.2AutoConfigurationImportSelector</h4><p>在我们的开发过程中，除了我们自己编写的代码外，我们还需要引用很多第三方的依赖，spring boot也可以通过自动配置，帮我们引入第三方的依赖。其原理就是通过@EnableAutoConfiguration这个注解导入的AutoConfigurationImportSelector类来实现的。</p>
+<p>AutoConfigurationImportSelector这个类通过SpringFactoriesLoader.loadFactoryNames这个方法来加载第三方配置。源码如下：<br><img src="https://img-blog.csdnimg.cn/20190212143052331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190212143137202.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190212143243636.png#pic_center" alt="在这里插入图片描述"><br>loadFactoryNames方法的第一个参数getSpringFactoriesLoaderFactoryClass()，直接返回了==EnableAutoConfiguration==这个类。<br><img src="https://img-blog.csdnimg.cn/20190212144327296.png#pic_center" alt="在这里插入图片描述"><br>进入SpringFactoriesLoader类后可以看到，loadFactoryNames方法又去调用了loadSpringFactories这个方法。代码如下：<br><img src="https://img-blog.csdnimg.cn/20190212144501639.png#pic_center" alt="在这里插入图片描述"><br>最终这个方法里，SpringFactoriesLoader会去加载jar包中的META-INF/spring.factories。如果找到这个文件，SpringFactoriesLoader就会搜索文件中的一个配置org.springframework.boot.autoconfigure.EnableAutoConfiguration,并读取后面的值。<br><img src="https://img-blog.csdnimg.cn/20190212144602339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x4ZF8xMTM=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>SpringBoot中的META-INF/spring.factories（完整路径：spring-boot/spring-boot-autoconfigure/src/main/resources/META-INF/spring.factories）中关于EnableAutoConfiguration的这段配置如下（只列出了一部分）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Auto Configure</span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration,\</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>当然了，这些AutoConfiguration不是所有都会加载的，会根据AutoConfiguration上的@ConditionalOnClass等条件，再进一步判断是否加载。下篇文章我们通过HttpEncodingAutoConfiguration实例来分析整个自动配置的过程。</p>
+
       
     </div>
 
@@ -466,6 +528,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-boot/" rel="tag"># spring boot</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
       
 
       
@@ -491,6 +561,10 @@
           
 
   
+    <div class="comments" id="comments">
+    </div>
+
+  
 
 
 
@@ -513,15 +587,24 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Li Xiaodong">
             
               <p class="site-author-name" itemprop="name">Li Xiaodong</p>
-              <p class="site-description motion-element" itemprop="description">The best website in the Eastern Hemisphere.</p>
+              <p class="site-description motion-element" itemprop="description">不止是技术</p>
           </div>
 
           
@@ -538,7 +621,35 @@
               
 
               
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
 
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
               
             </nav>
           
@@ -587,6 +698,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SpringBootApplication"><span class="nav-text">1. @SpringBootApplication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-SpringBootConfiguration"><span class="nav-text">1.1@SpringBootConfiguration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-EnableAutoConfiguration"><span class="nav-text">1.2@EnableAutoConfiguration</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-AutoConfigurationPackage"><span class="nav-text">1.2.1@AutoConfigurationPackage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2AutoConfigurationImportSelector"><span class="nav-text">1.2.2AutoConfigurationImportSelector</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -605,6 +733,9 @@
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Li Xiaodong</span>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
 
   
 
@@ -669,9 +800,6 @@
 
 
 
-  
-  
-
 
 
 
@@ -690,12 +818,6 @@
 
   
   <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/three/three.min.js"></script>
-
-  
-  <script src="/lib/three/three-waves.min.js"></script>
 
 
   
@@ -717,6 +839,7 @@
 
 
 
+
   
   <script src="/js/src/scrollspy.js?v=7.0.0"></script>
 <script src="/js/src/post-details.js?v=7.0.0"></script>
@@ -731,6 +854,35 @@
 
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '3nPcSi7Aex19Jd2u1fvayEDR-gzGzoHsz',
+    appKey: 'D10qkve0BAwewKAHuFGdSHxR',
+    placeholder: '说点什么吧',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
 
 
   

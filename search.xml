@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[HelloWorld]]></title>
-    <url>%2F2019%2F02%2F14%2FHelloWorld%2F</url>
-    <content type="text"></content>
+    <title><![CDATA[spring boot(一) 自动装配----约定大于配置]]></title>
+    <url>%2F2019%2F02%2F14%2Fspring-boot-%E4%B8%80-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D-%E7%BA%A6%E5%AE%9A%E5%A4%A7%E4%BA%8E%E9%85%8D%E7%BD%AE%2F</url>
+    <content type="text"><![CDATA[随着spring体系的发展，我们在开发时需要配置整合的东西也越来越多，在进行开发时，繁琐的配置浪费了大量的时间与精力。此时spring boot就应运而生了。spring boot为我们整合了常用的J2EE体系，极大的简化了我们的开发。作为一名Java程序员，学习spring boot的使用，也是势在必行。spring boot的理念是“约定大于配置”，通俗的说，就是spring boot为我们提供了一套默认的配置，不需要我们再去手动的配置xml配置文件，只有当spring boot默认提供的配置不满足我们的需求时，我们再去修改默认配置。那么，spring boot是如何做到自动装配的呢？下面就通过源码来学习一下spring boot的自动装配机制。 1. @SpringBootApplication该类为spring boot的主配置类，spring boot的核心功能就是由@SpringBootApplication这个注解来实现的。进入@SpringBootApplication注解后，发现这个注解还包含了很多注解，其中比较重要的有两个，分别是@SpringBootConfiguration、@EnableAutoConfiguration 1.1@SpringBootConfiguration进入@SpringBootConfiguration后发现，该注解包含了@Configuration。==@Configuration==： 表示该类是一个配置类。spring boot建议我们使用该注解来代替传统的xml配置文件； @Configuration包含了@Component。所以加了@Configuration注解的类会自动纳入spring容器。 1.2@EnableAutoConfiguration进入@EnableAutoConfiguration，该注解包含了@AutoConfigurationPackage，并导入了一个AutoConfigurationImportSelector类。 1.2.1@AutoConfigurationPackage我们以往使用spring进行传统方式的开发时，需要在配置文件中定义一个scan扫描器，在xml配置了这个标签后，spring才可以自动去扫描base-pack下面或者子包下面的java文件，如果扫描到有@Component @Controller@Service等这些注解的类，则把这些类注册为bean。在spring boot中，我们只需要将我们自己写的java文件，放到@SpringBootApplication所在类的包下，spring boot就可以自动的帮我们完成扫描，不需要我们再去手动配置扫描器，简化了我们的开发流程。spring boot就是使用@AutoConfigurationPackage这个注解，完成了自动扫描，原理如下：进入@AutoConfigurationPackage后发现这个注解导入了一个名为Registrar的内部类，该内部类的代码如下所示。通过 图中标注的方法，spring boot可以找到@SpringBootApplication所在类的包，并将该包与它的子包全部注册到spring容器中进行管理。 1.2.2AutoConfigurationImportSelector在我们的开发过程中，除了我们自己编写的代码外，我们还需要引用很多第三方的依赖，spring boot也可以通过自动配置，帮我们引入第三方的依赖。其原理就是通过@EnableAutoConfiguration这个注解导入的AutoConfigurationImportSelector类来实现的。 AutoConfigurationImportSelector这个类通过SpringFactoriesLoader.loadFactoryNames这个方法来加载第三方配置。源码如下：loadFactoryNames方法的第一个参数getSpringFactoriesLoaderFactoryClass()，直接返回了==EnableAutoConfiguration==这个类。进入SpringFactoriesLoader类后可以看到，loadFactoryNames方法又去调用了loadSpringFactories这个方法。代码如下：最终这个方法里，SpringFactoriesLoader会去加载jar包中的META-INF/spring.factories。如果找到这个文件，SpringFactoriesLoader就会搜索文件中的一个配置org.springframework.boot.autoconfigure.EnableAutoConfiguration,并读取后面的值。SpringBoot中的META-INF/spring.factories（完整路径：spring-boot/spring-boot-autoconfigure/src/main/resources/META-INF/spring.factories）中关于EnableAutoConfiguration的这段配置如下（只列出了一部分）： 12345678# Auto Configureorg.springframework.boot.autoconfigure.EnableAutoConfiguration=\org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration,\...... 当然了，这些AutoConfiguration不是所有都会加载的，会根据AutoConfiguration上的@ConditionalOnClass等条件，再进一步判断是否加载。下篇文章我们通过HttpEncodingAutoConfiguration实例来分析整个自动配置的过程。]]></content>
+      <categories>
+        <category>spring boot系列</category>
+      </categories>
+      <tags>
+        <tag>spring boot</tag>
+        <tag>java</tag>
+      </tags>
   </entry>
 </search>
