@@ -2006,7 +2006,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff59ff;
+  background: #5c0aff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3294,10 +3294,4 @@ ul.breadcrumb li+li:last-child {
   padding: 25px;
   -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
-}
-.body {
-  background-image: url("https://source.unsplash.com/random");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: 50% 50%;
 }

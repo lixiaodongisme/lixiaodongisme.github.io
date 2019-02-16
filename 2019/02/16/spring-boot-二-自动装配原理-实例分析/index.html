@@ -101,15 +101,15 @@
   <meta name="description" content="在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。">
 <meta name="keywords" content="spring boot,java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）">
-<meta property="og:url" content="http://yoursite.com/2019/02/15/spring-boot-二-自动装配原理-实例分析/index.html">
+<meta property="og:title" content="spring boot(二)自动装配原理 - 实例分析">
+<meta property="og:url" content="http://yoursite.com/2019/02/16/spring-boot-二-自动装配原理-实例分析/index.html">
 <meta property="og:site_name" content="晓坞">
 <meta property="og:description" content="在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06ytry1qwj30h608imyk.jpg#pic_center">
-<meta property="og:updated_time" content="2019-02-15T06:52:51.896Z">
+<meta property="og:updated_time" content="2019-02-16T08:25:39.894Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）">
+<meta name="twitter:title" content="spring boot(二)自动装配原理 - 实例分析">
 <meta name="twitter:description" content="在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。">
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g06ytry1qwj30h608imyk.jpg#pic_center">
 
@@ -118,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/15/spring-boot-二-自动装配原理-实例分析/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/16/spring-boot-二-自动装配原理-实例分析/">
 
 
 
@@ -128,7 +128,7 @@
   };
 </script>
 
-  <title>spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration） | 晓坞</title>
+  <title>spring boot(二)自动装配原理 - 实例分析 | 晓坞</title>
   
 
 
@@ -377,7 +377,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/15/spring-boot-二-自动装配原理-实例分析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/16/spring-boot-二-自动装配原理-实例分析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Li Xiaodong">
@@ -394,7 +394,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">spring boot(二)自动装配原理 - 实例分析（HttpEncodingAutoConfiguration）
+          <h1 class="post-title" itemprop="name headline">spring boot(二)自动装配原理 - 实例分析
 
               
             
@@ -420,7 +420,7 @@
                 
               
 
-              <time title="创建时间：2019-02-15 11:48:40 / 修改时间：14:52:51" itemprop="dateCreated datePublished" datetime="2019-02-15T11:48:40+08:00">2019-02-15</time>
+              <time title="创建时间：2019-02-16 16:24:49 / 修改时间：16:25:39" itemprop="dateCreated datePublished" datetime="2019-02-16T16:24:49+08:00">2019-02-16</time>
             
 
             
@@ -461,8 +461,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/02/15/spring-boot-二-自动装配原理-实例分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/15/spring-boot-二-自动装配原理-实例分析/" itemprop="commentCount"></span>
+                <a href="/2019/02/16/spring-boot-二-自动装配原理-实例分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/16/spring-boot-二-自动装配原理-实例分析/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -497,8 +497,7 @@
       
 
       
-        <p>在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。<br><a id="more"></a><br>我们在常规项目中配置Http编码的时候是在web.xml添加一个filter,如：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>encodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.springframework.web.filter.CharacterEncodingFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>encoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>forceEncoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>encodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+        <p>在了解了Spring Boot的运作原理后，现在来简单的分析一个Spring Boot内置的自动配置功能：http的编码配置。<br><a id="more"></a><br>我们在常规项目中配置Http编码的时候是在web.xml添加一个filter,如：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>encodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.springframework.web.filter.CharacterEncodingFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>encoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>forceEncoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>encodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>spring boot要完成自动配置，就要满足两个条件：</p>
 <ol>
 <li>能配置CharacterEncodingFilter这个Bean；</li>
