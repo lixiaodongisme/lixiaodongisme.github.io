@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="AHo20JEzDdD9dTlUHepqbM8pwwAzyXyGa7pXVHujPlQ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-xiao.ico?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-xiao.ico?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="我们在开发一个项目时，肯定会用到配置文件，spring boot为我们提供了丰富的外部配置，常见的有：  核心配置文件 application.properties application.yml   命令行参数 OS环境变量 Dev属性">
+<meta name="keywords" content="spring boot,java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring boot(三)spring boot的配置文件详解">
+<meta property="og:url" content="http://yoursite.com/2019/02/17/spring-boot-三-spring-boot的配置文件详解/index.html">
+<meta property="og:site_name" content="晓坞">
+<meta property="og:description" content="我们在开发一个项目时，肯定会用到配置文件，spring boot为我们提供了丰富的外部配置，常见的有：  核心配置文件 application.properties application.yml   命令行参数 OS环境变量 Dev属性">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g09jdgzrq3j307202jt8z.jpg#pic_center">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g08bw101bnj30is0b40t8.jpg#pic_center">
+<meta property="og:updated_time" content="2019-02-17T09:13:23.966Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring boot(三)spring boot的配置文件详解">
+<meta name="twitter:description" content="我们在开发一个项目时，肯定会用到配置文件，spring boot为我们提供了丰富的外部配置，常见的有：  核心配置文件 application.properties application.yml   命令行参数 OS环境变量 Dev属性">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006VmJosly1g09jdgzrq3j307202jt8z.jpg#pic_center">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/17/spring-boot-三-spring-boot的配置文件详解/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>spring boot(三)spring boot的配置文件详解 | 晓坞</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">晓坞</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">李晓冬's Blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/17/spring-boot-三-spring-boot的配置文件详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Li Xiaodong">
+      <meta itemprop="description" content="不止是技术">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="晓坞">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring boot(三)spring boot的配置文件详解
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-17 17:04:29 / 修改时间：17:13:23" itemprop="dateCreated datePublished" datetime="2019-02-17T17:04:29+08:00">2019-02-17</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/spring-boot系列/" itemprop="url" rel="index"><span itemprop="name">spring boot系列</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/02/17/spring-boot-三-spring-boot的配置文件详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/17/spring-boot-三-spring-boot的配置文件详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们在开发一个项目时，肯定会用到配置文件，spring boot为我们提供了丰富的外部配置，常见的有：</p>
+<ul>
+<li>核心配置文件<ul>
+<li>application.properties</li>
+<li>application.yml</li>
+</ul>
+</li>
+<li>命令行参数</li>
+<li>OS环境变量</li>
+<li>Dev属性<a id="more"></a>
+<blockquote>
+<p>推荐使用YAML来写配置文件，因为相比与传统的json或者是properties格式的配置文件，YAML格式更简洁易读。YAML语法学习推荐一下阮一峰大神的<a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html" target="_blank" rel="noopener">YAML教程</a></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="一、核心配置文件"><a href="#一、核心配置文件" class="headerlink" title="一、核心配置文件"></a>一、核心配置文件</h2><p>核心配置文件是我们用的比较频率最高的一种配置方式，核心配置文件使用key-value的形式来进行配置。其中key主要分为两种：</p>
+<ul>
+<li>默认属性：根据官方提供的<a href="https://docs.spring.io/spring-boot/docs/1.5.9.RELEASE/reference/htmlsingle/#common-application-properties" target="_blank" rel="noopener">配置文件可配置列表</a>进行修改，spring boot将自动读取配置和初始化。</li>
+<li>自定义属性：根据需求任意编写，但是需要自行读取配置和初始化。</li>
+</ul>
+<h3 id="1-1添加默认属性"><a href="#1-1添加默认属性" class="headerlink" title="1.1添加默认属性"></a>1.1添加默认属性</h3><p>以数据库配置为例，在application.yml配置文件中添加如下：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://127.0.0.1:3306/douban?serverTimezone=GMT%2B8</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="1-2添加自定义属性"><a href="#1-2添加自定义属性" class="headerlink" title="1.2添加自定义属性"></a>1.2添加自定义属性</h3><p>在 application.yml配置文件中添加一个用户的信息如下：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">user:</span></span><br><span class="line"><span class="attr">  userName:</span> <span class="string">张三</span></span><br><span class="line"><span class="attr">  age:</span> <span class="number">18</span></span><br><span class="line"><span class="attr">  birthday:</span> <span class="number">1991</span><span class="string">/01/01</span></span><br><span class="line"><span class="attr">  address:</span> <span class="string">&#123;province:</span> <span class="string">陕西,</span> <span class="attr">city:</span> <span class="string">西安,</span> <span class="attr">zone:</span> <span class="string">雁塔区&#125;</span></span><br><span class="line"><span class="attr">  skills:</span> <span class="string">[Java,</span> <span class="string">Python]</span></span><br></pre></td></tr></table></figure></p>
+<p>同时，spring boot也支持在系统加载的时候配置随机数：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">user:</span></span><br><span class="line"><span class="attr">  random:</span></span><br><span class="line"><span class="attr">    secret:</span> <span class="string">$&#123;random.value&#125;</span> <span class="comment">#随机32位MD5字符串</span></span><br><span class="line"><span class="attr">    intNumber:</span> <span class="string">$&#123;random.int&#125;</span> <span class="comment">#随机int数字</span></span><br><span class="line"><span class="attr">    longNumber:</span> <span class="string">$&#123;random.long&#125;</span> <span class="comment">#随机long数字</span></span><br><span class="line"><span class="attr">    uuid:</span> <span class="string">$&#123;random.uuid&#125;</span> <span class="comment">#随机uuid</span></span><br><span class="line"><span class="attr">    lessTen:</span> <span class="string">$&#123;random.int(10)&#125;</span> <span class="comment">#随机10以内的数字</span></span><br><span class="line"><span class="attr">    range:</span> <span class="string">$&#123;random.int[1024,65536]&#125;</span> <span class="comment">#随机1024~65536之内的数字</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="1-3读取核心配置文件"><a href="#1-3读取核心配置文件" class="headerlink" title="1.3读取核心配置文件"></a>1.3读取核心配置文件</h3><h4 id="1-3-1使用-ConfigurationProperties批量读取属性"><a href="#1-3-1使用-ConfigurationProperties批量读取属性" class="headerlink" title="1.3.1使用@ConfigurationProperties批量读取属性"></a>1.3.1使用@ConfigurationProperties批量读取属性</h4><p>在需要读取配置文件的类上添加@ConfigurationProperties和@Component（或@Configuration），并提供getter和setter方法。以读取上面的用户信息为例，我们编写一个绑定的类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span> <span class="comment">//让该类被spring的IOC容器管理，也可以使用@Configuration</span></span><br><span class="line"><span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"user"</span>) <span class="comment">// 通过prefix来绑定对应的属性</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> String userName;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> Date birthday;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> Map&lt;String, Object&gt; address;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> String[] skills;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 省略getter和setter方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们编写一个测试类打印一下这个User的值，可以看到已经读取到了配置文件中的值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User&#123;userName=<span class="string">'张三'</span>, age=<span class="number">18</span>, birthday=Tue Jan <span class="number">01</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> CST <span class="number">1991</span>, address=&#123;province=陕西, city=西安, zone=雁塔区&#125;, skills=[Java, Python]&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>spring boot读取默认配置时也是使用了@ConfigurationProperties这个注解，具体原理可以参考<a href="https://blog.csdn.net/lxd_113/article/details/87103430" target="_blank" rel="noopener">之前的文章</a>。</em></p>
+<h4 id="1-3-2使用-Value读取单个属性"><a href="#1-3-2使用-Value读取单个属性" class="headerlink" title="1.3.2使用@Value读取单个属性"></a>1.3.2使用@Value读取单个属性</h4><p>还是用上面那个用户信息的例子来说明如何使用@Value，我们编写一个绑定类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">   <span class="meta">@Value</span>(<span class="string">"$&#123;user.userName&#125;"</span>)</span><br><span class="line">   <span class="keyword">private</span> String userName;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Value</span>(<span class="string">"99"</span>)</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 省略getter和setter方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们只需要在需要注入的属性或者setter方法上加上@Value(“${xxx}”)/@Value(“xxx”)这样就可以将配置文件中的值注入到绑定类中，并且还可以将任意值注入属性。我们打印一下User对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User&#123;userName=<span class="string">'张三'</span>, age=<span class="number">99</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>注意：@Value不支持注入静态变量，可以间接通过Setter方法来注入</em><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Date birthday;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Value</span>(<span class="string">"$&#123;user.birthday&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBirthday</span><span class="params">(Date birthday)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.birthday = birthday;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="1-3-3-ConfigurationProperties和-Value的区别"><a href="#1-3-3-ConfigurationProperties和-Value的区别" class="headerlink" title="1.3.3@ConfigurationProperties和@Value的区别"></a>1.3.3@ConfigurationProperties和@Value的区别</h4><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>@Value</th>
+<th>@ ConfigurationProperties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>批量注入</td>
+<td>NO</td>
+<td>YES</td>
+</tr>
+<tr>
+<td>支持松散语法</td>
+<td>NO</td>
+<td>YES</td>
+</tr>
+<tr>
+<td>支持支持SpringEL</td>
+<td>YES</td>
+<td>NO</td>
+</tr>
+<tr>
+<td>支持JSR303数据校验</td>
+<td>NO</td>
+<td>YES</td>
+</tr>
+<tr>
+<td>注入复杂类型</td>
+<td>NO</td>
+<td>YES</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>松散语法：以本例来说，java文件中的属性名为userName，为标准的驼峰命名方式。我们在yml或者properties中可以不采用驼峰命名方式，而是使用user-name。这样也可以注入成功，这就是松散语法。</p>
+</blockquote>
+<blockquote>
+<p>spring boot中的简单数据类型：在spring boot中，8种基本数据类型，String，Date都是简单类型。</p>
+</blockquote>
+<p>显然@ConfigurationProperties的功能更加强大，所以在开发中建议优先使用@ConfigurationProperties。</p>
+<h2 id="二、自定义配置文件"><a href="#二、自定义配置文件" class="headerlink" title="二、自定义配置文件"></a>二、自定义配置文件</h2><p>在项目开发中，我们有时会将与项目相关的一些配置信息保存到单独的配置文件中，这时我们可以使用@PropertySource注解来读取我们自定义的配置文件。<br><img src="http://ww1.sinaimg.cn/large/006VmJosly1g09jdgzrq3j307202jt8z.jpg#pic_center" alt=""><br>我们在resources下新建一个config.properties文件，并写入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">user.user-name=李四</span><br><span class="line">user.age=27</span><br><span class="line">user.birthday=1991/02/01</span><br><span class="line">user.address.province=陕西</span><br><span class="line">user.address.city=西安</span><br><span class="line">user.address.zone=新城区</span><br><span class="line">user.skills[0]=Java</span><br><span class="line">user.skills[1]=JavaScript</span><br></pre></td></tr></table></figure></p>
+<p>我们知道spring boot只会默认读取application.properties和application.yml中的配置，为了让spring boot读取到我们的配置，我们需要在绑定类上加一个@PropertySource注解，并指明我们自定义配置文件的位置。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"user"</span>)</span><br><span class="line"><span class="meta">@PropertySource</span>(<span class="string">"classpath:config.properties"</span>) <span class="comment">//读取自定义配置文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> String userName;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> Date birthday;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> Map&lt;String, Object&gt; address;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> String[] skills;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 省略getter和setter方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印User对象可以看到自定义的配置文件已经正确读取到了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User&#123;userName=<span class="string">'李四'</span>, age=<span class="number">27</span>, birthday=Fri Feb <span class="number">01</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> CST <span class="number">1991</span>, address=&#123;city=西安, zone=新城区, province=陕西&#125;, skills=[Java, JavaScript]&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>注意：如果要使用自定义配置文件，必须使用.properties文件格式，目前(2.1.2版本)@PropertySource还不支持读取.yml格式的自定义配置文件。</em></p>
+<h2 id="三、spring-boot多环境设置及切换"><a href="#三、spring-boot多环境设置及切换" class="headerlink" title="三、spring boot多环境设置及切换"></a>三、spring boot多环境设置及切换</h2><p>我们在实际工作中，会存在很多套环境，例如开发环境、测试环境、生产环境。程序在不同的环境下可能会有不同的配置，例如数据库的连接、日志的级别等等。<br>使用Spring Boot的Profile可以实现多场景下的配置切换，方便开发中进行测试和部署生产环境。 下面就大致介绍一下怎么使用profile配置不同环境的配置文件。</p>
+<h3 id="3-1使用properties配置文件"><a href="#3-1使用properties配置文件" class="headerlink" title="3.1使用properties配置文件"></a>3.1使用properties配置文件</h3><p>使用properties文件进行多个环境的配置，创建若干个application-{profile}.properties文件用于存放不同环境特有的配置，将与环境无关的配置存放在application.properties文件中。application.properties文件中通过<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">以配置端口号为例，假设我们在开发环境需要使用8081端口，生产环境需要使用8082端口，我们先出分别为开发环境和生产环境创建application-dev.properties和application-pro.properties文件。</span><br><span class="line">![在这里插入图片描述](https://img-blog.csdnimg.cn/20190213223358294.png#pic_center)</span><br><span class="line">在application-dev.properties中使用```server.port=8081```设定端口号为8081，同理，在application-pro.properties中设置端口号为8082。需要切换端口时，只需要在application.properties中指定我们需要使用的配置文件即可：</span><br></pre></td></tr></table></figure></p>
+<p>spring.profiles.active=dev<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">### 3.2使用yml配置文件</span><br><span class="line">使用yml文件配置多套环境的原理与properties相同，只是我们不需要在建多个配置文件，可以在application.yml配置文件中进行配置。</span><br><span class="line">```yml</span><br><span class="line">server:</span><br><span class="line">  port: 8081</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: pro</span><br><span class="line">---</span><br><span class="line">server:</span><br><span class="line">  port: 8082</span><br><span class="line">spring:</span><br><span class="line">  profiles: dev</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">server:</span><br><span class="line">  port: 8083</span><br><span class="line">spring:</span><br><span class="line">  profiles: pro</span><br></pre></td></tr></table></figure></p>
+<p>在yml文件中，我们使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">### 3.3使用命令行切换环境</span><br><span class="line">在spring boot时，我们一般是将项目打成jar包部署到服务器上，启动时我们只要加上一行```--spring.profiles.active=xxx```命令，就可以控制我们使用哪个环境的配置，非常方便。完整命令如下：</span><br><span class="line">```shell</span><br><span class="line">java -jar xxx.jar --spring.profiles.active=dev 表示使用开发环境的配置</span><br><span class="line">java -jar xxx.jar --spring.profiles.active=pro 表示使用生产环境的配置</span><br></pre></td></tr></table></figure></p>
+<h2 id="四、核心配置文件的位置以及优先级"><a href="#四、核心配置文件的位置以及优先级" class="headerlink" title="四、核心配置文件的位置以及优先级"></a>四、核心配置文件的位置以及优先级</h2><p>spring boot默认可以读取application.properties/application.yml这两个核心配置文件。核心配置文件可以存在与以下四个地方</p>
+<ul>
+<li>file:./config</li>
+<li>file:./</li>
+<li>classpath:./config</li>
+<li>classpath:./<br>spring boot启动时，这四个位置的配置文件都会读取。也就是说这四个位置的配置文件可以是互补的关系。但是如果有某一项配置冲突，以优先级高的配置文件为准。优先级从上往下依次降低。</li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/006VmJosly1g08bw101bnj30is0b40t8.jpg#pic_center" alt=""><br><em>注意：如果application.yml和application.properties文件同时存在，他们之间也是互补的关系，但是application.properties的优先级高于application.yml。</em></p>
+<h2 id="五、外部配置文件与命令行参数"><a href="#五、外部配置文件与命令行参数" class="headerlink" title="五、外部配置文件与命令行参数"></a>五、外部配置文件与命令行参数</h2><p>设想一个场景，我们的项目已经开发完成，并且打成jar包准备上线发布了，这时由于一些原因，之前的某些配置需要修改。按常规的做法，我们要去代码中改好后，重新打jar包，然后再部署。这样就显得非常繁琐，spring boot为我们提供了一些办法，可以使我们不修改原有代码的同时，更改配置。</p>
+<h3 id="5-1命令行参数"><a href="#5-1命令行参数" class="headerlink" title="5.1命令行参数"></a>5.1命令行参数</h3><p>如果我们需要修改的配置很少，可以通过命令行参数的方式。上文已经提过，参考<em>3.3使用命令行切换环境</em>。如果需要输入多个命令，中间用空格隔开。</p>
+<h3 id="5-2外部配置文件"><a href="#5-2外部配置文件" class="headerlink" title="5.2外部配置文件"></a>5.2外部配置文件</h3><p>如果我们需要修改的配置很多，用命令行参数修改明显是不好的。这时我们可以将所有需要修改的配置放到一个外部配置文件中。然后在启动项目时，通过<br><code>--spring.config.location=D:/xxx.application</code>这个命令来加载外部配置文件。</p>
+<h2 id="六、配置的优先级"><a href="#六、配置的优先级" class="headerlink" title="六、配置的优先级"></a>六、配置的优先级</h2><p>上面我们提到了spring boot支持的很多种配置方法。如果同一个配置出现在多个地方，优先级高的配置会覆盖优先级低的配置。现在来总结一下这些常用配置方式的优先级。</p>
+<ul>
+<li>外部配置文件&gt;命令行参数&gt;核心配置文件(.properties&gt;.yml)</li>
+</ul>
+<p>具体的优先级规则，可以查看<a href="https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/htmlsingle/#boot-features-external-config" target="_blank" rel="noopener">官方文档中的介绍</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果您觉得我的文章帮助了您,可以自愿给我一点赞赏,请我喝瓶冰阔乐:)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>鼓励一下</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Li Xiaodong 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Li Xiaodong 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+      <div id="bitcoin" style="display: inline-block">
+        <img id="bitcoin_qr" src="/images/alipay2.png" alt="Li Xiaodong 支付宝红包">
+        <p>支付宝红包</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-boot/" rel="tag"># spring boot</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/16/spring-boot-二-自动装配原理-实例分析/" rel="next" title="spring boot(二)自动装配原理 - 实例分析">
+                <i class="fa fa-chevron-left"></i> spring boot(二)自动装配原理 - 实例分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Li Xiaodong">
+            
+              <p class="site-author-name" itemprop="name">Li Xiaodong</p>
+              <p class="site-description motion-element" itemprop="description">不止是技术</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/lixiaodongisme" title="GitHub &rarr; https://github.com/lixiaodongisme" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:lixiaodongisme@163.com" title="E-Mail &rarr; mailto:lixiaodongisme@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、核心配置文件"><span class="nav-text">一、核心配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1添加默认属性"><span class="nav-text">1.1添加默认属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2添加自定义属性"><span class="nav-text">1.2添加自定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3读取核心配置文件"><span class="nav-text">1.3读取核心配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1使用-ConfigurationProperties批量读取属性"><span class="nav-text">1.3.1使用@ConfigurationProperties批量读取属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2使用-Value读取单个属性"><span class="nav-text">1.3.2使用@Value读取单个属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-3-ConfigurationProperties和-Value的区别"><span class="nav-text">1.3.3@ConfigurationProperties和@Value的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、自定义配置文件"><span class="nav-text">二、自定义配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、spring-boot多环境设置及切换"><span class="nav-text">三、spring boot多环境设置及切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1使用properties配置文件"><span class="nav-text">3.1使用properties配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、核心配置文件的位置以及优先级"><span class="nav-text">四、核心配置文件的位置以及优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、外部配置文件与命令行参数"><span class="nav-text">五、外部配置文件与命令行参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1命令行参数"><span class="nav-text">5.1命令行参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2外部配置文件"><span class="nav-text">5.2外部配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、配置的优先级"><span class="nav-text">六、配置的优先级</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li Xiaodong</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '3nPcSi7Aex19Jd2u1fvayEDR-gzGzoHsz',
+    appKey: 'D10qkve0BAwewKAHuFGdSHxR',
+    placeholder: '说点什么吧',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
